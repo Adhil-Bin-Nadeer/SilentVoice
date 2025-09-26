@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blink Flappy Bird Game</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+</head>
+<body class="flappy-bird-page">
+    <div class="app-container">
+        <header class="app-header">
+            <div class="profile-section">
+                <div class="profile-avatar"></div>
+                <span id="currentUsernameDisplay" class="profile-name">Player</span>
+            </div>
+        </header>
+        <main class="app-main-content">
+            <section class="game-section" style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; gap: 40px;">
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <canvas id="flappyCanvas" width="500" height="700" style="background: #70c5ce; display: block; border-radius: 15px;"></canvas>
+                    <div id="gameOverMenu" style="display:none; text-align:center; margin-top:20px;">
+                        <h2>Game Over</h2>
+                        <div id="gameOverOptions">
+                            <button class="game-menu-btn highlighted" id="retryBtn">Retry</button>
+                            <button class="game-menu-btn" id="quitBtn">Quit</button>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <video id="webcam" autoplay muted playsinline style="width: 320px; height: 240px; border: 2px solid #007bff; border-radius: 12px; background: #222; margin-bottom: 10px;"></video>
+                    <canvas id="canvas" style="display:none;"></canvas>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html> 
