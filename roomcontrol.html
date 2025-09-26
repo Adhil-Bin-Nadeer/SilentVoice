@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Room Control</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <style>
+        /* Improved UI styles for roomcontrol.html */
+        body.room-control-page {
+            background: #f0f4f8;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .app-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            min-height: 90vh;
+        }
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            border-bottom: 1px solid #ddd;
+            background-color: #007acc;
+            color: white;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+        .profile-section {
+            display: flex;
+            align-items: center;
+        }
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            background: #005a9e;
+            border-radius: 50%;
+            margin-right: 12px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.2);
+        }
+        .profile-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .timer-section {
+            display: flex;
+            gap: 15px;
+        }
+        .timer-unit {
+            text-align: center;
+        }
+        .timer-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            display: block;
+        }
+        .timer-label {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+        .app-main-content {
+            flex-grow: 1;
+            padding: 25px;
+        }
+        .room-control-section h2 {
+            margin-bottom: 20px;
+            font-weight: 700;
+            color: #007acc;
+            text-align: center;
+        }
+        .device-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .device-button {
+            background-color: #007acc;
+            border: none;
+            color: white;
+            padding: 15px 25px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 122, 204, 0.4);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            min-width: 120px;
+            text-align: center;
+            user-select: none;
+        }
+        .device-button:hover,
+        .device-button.highlighted {
+            background-color: #005a9e;
+            box-shadow: 0 6px 12px rgba(0, 90, 158, 0.6);
+        }
+        .back-button {
+            background-color: #e74c3c;
+            box-shadow: 0 4px 8px rgba(231, 76, 60, 0.4);
+        }
+        .back-button:hover,
+        .back-button.highlighted {
+            background-color: #c0392b;
+            box-shadow: 0 6px 12px rgba(192, 57, 43, 0.6);
+        }
+    </style>
+</head>
+<body class="room-control-page">
+    <div class="app-container">
+        <header class="app-header">
+            <div class="profile-section">
+                <div class="profile-avatar"></div>
+                <span id="currentUsernameDisplay" class="profile-name">Edward</span>
+            </div>
+            <div class="timer-section">
+                <div class="timer-unit">
+                    <span id="hoursDisplay" class="timer-value">00</span>
+                    <span class="timer-label">Hours</span>
+                </div>
+                <div class="timer-unit">
+                    <span id="minutesDisplay" class="timer-value">00</span>
+                    <span class="timer-label">Minutes</span>
+                </div>
+                <div class="timer-unit">
+                    <span id="secondsDisplay" class="timer-value">00</span>
+                    <span class="timer-label">Seconds</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="app-main-content">
+            <section class="room-control-section">
+                <h2>Room Control</h2>
+                <div class="device-buttons">
+                    <button class="device-button" id="light1Btn" data-device="light1">Light1</button>
+                    <button class="device-button" id="light2Btn" data-device="light2">Light2</button>
+                    <button class="device-button" id="fanBtn" data-device="fan">Fan</button>
+                    <button class="device-button" id="acBtn" data-device="ac">AC</button>
+                    <button class="device-button back-button" id="backBtn">Back</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <select id="userSelect" style="display:none;"></select>
+    <div id="messageDisplay" style="display:none;"></div>
+    <div id="morseSequenceDisplay" style="display:none;"></div>
+    <div id="overallStatusText" style="display:none;"></div>
+    <div id="cooldownProgressBar" style="display:none;"></div>
+    <div id="letterTimerInfo" style="display:none;"></div>
+    <div id="spaceTimerInfo" style="display:none;"></div>
+    <video id="webcam" style="display:none;"></video>
+    <canvas id="canvas" style="display:none;"></canvas>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
