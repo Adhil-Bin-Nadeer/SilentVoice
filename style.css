@@ -1,0 +1,744 @@
+/* --- Global Styles & Resets --- */
+:root {
+    --primary-blue: #007bff;
+    --dark-blue: #0056b3;
+    --danger-red: #dc3545;
+    --dark-red: #c82333;
+    --secondary-gray: #6c757d;
+    --dark-gray: #5a6268;
+    --success-green: #28a745;
+    --dark-green: #218838;
+    --info-teal: #17a2b8;
+    --dark-teal: #138496;
+
+    --bg-light: #f0f2f5;
+    --bg-white: #ffffff;
+    --border-light: #e0e0e0;
+    --text-dark: #2c3e50;
+    --text-medium: #555;
+    --text-light: #666;
+
+    --soft-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --strong-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    --inner-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+
+    --border-radius-sm: 8px;
+    --border-radius-md: 15px;
+    --border-radius-lg: 20px;
+
+    /* Nav button specific colors */
+    --nav-yellow: #ffeb3b;
+    --nav-blue: #b3e5fc;
+    --nav-green: #c8e6c9;
+    --nav-red: #ffccbc;
+    --nav-purple: #e1bee7;
+
+    /* New colors for quick message buttons */
+    --qm-hungry-yellow: #fdd835; /* Brighter yellow for hungry */
+    --qm-water-blue: #4fc3f7;   /* Brighter blue for water */
+    --qm-pain-green: #66bb6a;   /* Brighter green for pain */
+    --qm-cold-red: #ff7043;    /* Orange/red for cold */
+    --qm-tired-teal: #26a69a;   /* Darker teal for tired */
+    --qm-bathroom-pink: #f06292; /* Pink for bathroom */
+    --qm-call-nurse-light-green: #9ccc65; /* Lighter green for call nurse */
+    --qm-tv-light-blue: #7986cb; /* Light blue/indigo for TV */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', 'Roboto', sans-serif;
+    background-color: var(--bg-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: var(--text-dark);
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* --- App Container --- */
+.app-container {
+    background-color: var(--bg-white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--strong-shadow);
+    width: 95%;
+    max-width: 1440px;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    gap: 30px;
+}
+
+/* --- Header Section --- */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-light);
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.profile-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.profile-avatar {
+    width: 55px;
+    height: 55px;
+    background: linear-gradient(45deg, #007bff, #00bfff);
+    border-radius: 50%;
+    border: 3px solid #e3f2fd;
+    box-shadow: var(--soft-shadow);
+}
+
+.profile-name {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.timer-section {
+    display: flex;
+    gap: 20px;
+    background-color: #3f51b5; /* Dark blue background */
+    border-radius: var(--border-radius-md);
+    padding: 10px 20px;
+    box-shadow: var(--soft-shadow);
+}
+
+.timer-unit {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none;
+    color: white;
+    position: relative;
+}
+
+.timer-unit:not(:last-child)::after {
+    content: ':';
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2em;
+    font-weight: bold;
+    color: white;
+}
+
+
+.timer-value {
+    font-size: 2.2em;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+    margin-bottom: 2px;
+    position: relative;
+    padding-top: 5px;
+}
+.timer-value::before {
+    content: '+';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7em;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+.timer-value::after {
+    content: '-';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7em;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+.timer-label {
+    font-size: 0.75em;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+
+/* --- Main Content Area --- */
+.app-main-content {
+    display: flex;
+    gap: 30px;
+}
+
+.left-nav-panel, .right-nav-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 180px;
+    flex-shrink: 0;
+}
+
+.nav-button {
+    /* Base styles for both button and a tags acting as nav buttons */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px 20px;
+    border: none; /* Remove default button border */
+    border-radius: var(--border-radius-md);
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: var(--soft-shadow);
+    position: relative;
+    text-align: left;
+    text-decoration: none; /* Remove underline for <a> tags */
+}
+
+.nav-button::after {
+    content: attr(data-text);
+    flex-grow: 1;
+}
+
+.nav-button .icon {
+    font-size: 2.2em;
+    flex-shrink: 0;
+    width: 1em; /* Ensure consistent icon width */
+    text-align: center;
+}
+
+.nav-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Nav Button Colors */
+.nav-button.yellow { background-color: var(--nav-yellow); }
+.nav-button.blue { background-color: var(--nav-blue); }
+.nav-button.green { background-color: var(--nav-green); }
+.nav-button.red { background-color: var(--nav-red); }
+.nav-button.purple { background-color: var(--nav-purple); }
+
+
+/* Highlighted state for navigable buttons */
+.nav-button.highlighted,
+.quick-message-button.highlighted,
+.control-button.highlighted,
+.device-button.highlighted,
+.back-button.highlighted {
+    transform: scale(1.05); /* Slightly enlarge */
+    box-shadow: 0 0 0 4px var(--primary-blue), 0 0 15px rgba(0, 123, 255, 0.7); /* Blue glow */
+    border: 1px solid var(--primary-blue); /* Stronger border */
+    z-index: 10; /* Ensure it's on top of other elements if needed */
+    animation: pulse-highlight 1.5s infinite; /* Add pulsing animation */
+}
+
+/* Pulsing animation for highlighted elements */
+@keyframes pulse-highlight {
+    0% { transform: scale(1.05); }
+    50% { transform: scale(1.08); }
+    100% { transform: scale(1.05); }
+}
+
+
+/* Active Button Indicator (enhanced) */
+.nav-button.active {
+    border: 1px solid var(--primary-blue);
+    background-color: var(--bg-white);
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+    transform: none;
+}
+.nav-button.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 15%;
+    bottom: 15%;
+    width: 8px;
+    background: linear-gradient(to bottom, #007bff, #00c0ff);
+    border-radius: 0 5px 5px 0;
+    box-shadow: 3px 0 8px rgba(0, 123, 255, 0.7);
+    z-index: 1;
+}
+
+
+/* --- Video/Quick Messages & Communication Section --- */
+.video-communication-section, .quick-messages-grid {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    align-items: center;
+    background-color: #f8f9fa;
+    border-radius: var(--border-radius-md);
+    padding: 25px;
+    box-shadow: var(--soft-shadow);
+}
+
+.video-display-area {
+    width: 100%;
+    background-color: #2c3e50;
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.4);
+    position: relative;
+    height: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#webcam { /* Changed from #videoFeed to #webcam */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+}
+
+.communication-controls {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.main-control-group, .additional-control-group {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.control-button {
+    padding: 14px 28px;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    font-size: 1.05em;
+    font-weight: 600;
+    color: var(--bg-white);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: var(--soft-shadow);
+    text-decoration: none; /* Remove underline for <a> tags */
+}
+
+/* Control Button Themes */
+.control-button.primary { background-color: var(--primary-blue); }
+.control-button.primary:hover:not(:disabled) { background-color: var(--dark-blue); transform: translateY(-2px); }
+
+.control-button.secondary { background-color: var(--danger-red); }
+.control-button.secondary:hover:not(:disabled) { background-color: var(--dark-red); transform: translateY(-2px); }
+
+.control-button.tertiary { background-color: var(--secondary-gray); }
+.control-button.tertiary:hover:not(:disabled) { background-color: var(--dark-gray); transform: translateY(-2px); }
+
+/* Icon-only buttons */
+.control-button.icon-button {
+    width: 60px;
+    height: 60px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    font-size: 1.2em;
+}
+.control-button.icon-button .icon {
+    font-size: 2.2em;
+    color: var(--bg-white);
+}
+
+.control-button.icon-button.blue { background-color: var(--primary-blue); }
+.control-button.icon-button.blue:hover:not(:disabled) { background-color: var(--dark-blue); transform: translateY(-2px); }
+
+.control-button.icon-button.gray { background-color: var(--secondary-gray); }
+.control-button.icon-button.gray:hover:not(:disabled) { background-color: var(--dark-gray); transform: translateY(-2px); }
+
+/* Disabled State */
+.control-button:disabled {
+    background-color: #e0e0e0;
+    color: #a0a0a0;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+.blink-feedback-area {
+    width: 85%;
+    margin-top: 15px;
+    text-align: center;
+    font-size: 0.9em;
+    color: var(--text-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.progress-bar-wrapper {
+    width: 100%;
+    background-color: #e9ecef;
+    border-radius: 6px;
+    height: 12px;
+    overflow: hidden;
+    box-shadow: var(--inner-shadow);
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: var(--success-green);
+    border-radius: 6px;
+    transition: width 0.1s ease-out, background-color 0.2s ease-in-out;
+}
+
+.status-message {
+    font-weight: 700;
+    color: var(--text-dark);
+    font-size: 1.1em;
+}
+
+.timer-hint {
+    font-size: 0.9em;
+    color: var(--text-medium);
+}
+
+
+/* --- Quick Messages Grid Specific Styles --- */
+.quick-messages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    width: 100%;
+    padding: 20px;
+}
+
+.quick-message-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 25px 15px;
+    border: none;
+    border-radius: var(--border-radius-md);
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: var(--soft-shadow);
+    text-align: center;
+    min-height: 120px;
+    text-decoration: none; /* Remove underline for <a> tags if they are used here */
+}
+
+.quick-message-button .icon {
+    font-size: 3.5em;
+    margin-bottom: 10px;
+    line-height: 1;
+}
+
+.quick-message-button .text {
+    font-size: 1em;
+    font-weight: 500;
+}
+
+.quick-message-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Quick Message Button Colors */
+.quick-message-button.yellow { background-color: var(--qm-hungry-yellow); }
+.quick-message-button.blue { background-color: var(--qm-water-blue); }
+.quick-message-button.red { background-color: var(--qm-cold-red); }
+.quick-message-button.green { background-color: var(--qm-pain-green); }
+.quick-message-button.teal { background-color: var(--qm-tired-teal); color: white;}
+.quick-message-button.pink { background-color: var(--qm-bathroom-pink); }
+.quick-message-button.light-green { background-color: var(--qm-call-nurse-light-green); }
+.quick-message-button.light-blue { background-color: var(--qm-tv-light-blue); color: white;}
+
+
+/* --- Footer Section --- */
+.app-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-top: 25px;
+    border-top: 1px solid var(--border-light);
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.message-output-area {
+    flex-grow: 1;
+    min-width: 350px;
+}
+
+.output-text {
+    margin: 8px 0;
+    font-size: 1.3em;
+    font-weight: 500;
+    color: var(--text-dark);
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.main-message {
+    color: var(--primary-blue);
+    font-weight: 600;
+}
+
+.morse-sequence {
+    font-family: 'Consolas', 'Courier New', monospace;
+    color: #607d8b;
+    font-size: 1.2em;
+}
+
+#sendQuickMessageBtn {
+    margin-top: 10px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    background-color: var(--primary-blue);
+    color: white;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    box-shadow: var(--soft-shadow);
+}
+#sendQuickMessageBtn:hover {
+    background-color: var(--dark-blue);
+    transform: translateY(-2px);
+}
+#sendQuickMessageBtn:disabled {
+    background-color: #e0e0e0;
+    color: #a0a0a0;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+
+.user-management-area {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.user-dropdown, .user-input {
+    padding: 12px 15px;
+    border: 1px solid #ced4da;
+    border-radius: var(--border-radius-sm);
+    font-size: 1em;
+    box-shadow: var(--inner-shadow);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    min-width: 180px;
+}
+
+.user-dropdown:focus, .user-input:focus {
+    border-color: var(--primary-blue);
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.action-button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    font-size: 1em;
+    font-weight: 600;
+    color: var(--bg-white);
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    box-shadow: var(--soft-shadow);
+}
+
+.action-button.green-bg { background-color: var(--success-green); }
+.action-button.green-bg:hover:not(:disabled) { background-color: var(--dark-green); transform: translateY(-2px); }
+
+.action-button.blue-bg { background-color: var(--info-teal); }
+.action-button.blue-bg:hover:not(:disabled) { background-color: var(--dark-teal); transform: translateY(-2px); }
+
+.action-button:disabled {
+    background-color: #e0e0e0;
+    color: #a0a0a0;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 1200px) {
+    .app-container {
+        padding: 20px;
+        gap: 20px;
+    }
+    .app-header, .app-main-content, .app-footer {
+        gap: 20px;
+    }
+    .nav-button {
+        padding: 15px;
+        font-size: 1em;
+    }
+    .nav-button .icon {
+        font-size: 2em;
+    }
+    .profile-name {
+        font-size: 1.6em;
+    }
+    .timer-value {
+        font-size: 1.8em;
+    }
+    .video-display-area {
+        height: 380px;
+    }
+    .quick-message-button {
+        padding: 20px 10px;
+        font-size: 0.95em;
+    }
+    .quick-message-button .icon {
+        font-size: 3em;
+    }
+}
+
+@media (max-width: 992px) {
+    .app-main-content {
+        flex-direction: column;
+        align-items: center;
+    }
+    .left-nav-panel, .right-nav-panel {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .video-communication-section, .quick-messages-grid {
+        width: 100%;
+    }
+    .app-footer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .message-output-area, .user-management-area {
+        width: 100%;
+        min-width: unset;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .quick-messages-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .app-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .profile-section {
+        flex-direction: column;
+        gap: 5px;
+    }
+    .timer-section {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+    .control-button {
+        padding: 10px 20px;
+        font-size: 0.95em;
+    }
+    .control-button.icon-button {
+        width: 50px;
+        height: 50px;
+    }
+    .control-button.icon-button .icon {
+        font-size: 1.8em;
+    }
+    .action-button, .user-dropdown, .user-input {
+        width: 100%;
+        max-width: 280px;
+    }
+    .user-management-area {
+        gap: 10px;
+    }
+    .quick-message-button {
+        padding: 15px 10px;
+        font-size: 0.9em;
+    }
+    .quick-message-button .icon {
+        font-size: 2.8em;
+    }
+}
+
+@media (max-width: 480px) {
+    .app-container {
+        padding: 15px;
+        gap: 15px;
+    }
+    .profile-name {
+        font-size: 1.4em;
+    }
+    .timer-value {
+        font-size: 1.6em;
+    }
+    .nav-button {
+        font-size: 0.9em;
+        padding: 10px;
+        gap: 10px;
+    }
+    .nav-button .icon {
+        font-size: 1.8em;
+    }
+    .video-display-area {
+        height: 280px;
+    }
+    .communication-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .main-control-group, .additional-control-group {
+        width: 100%;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .control-button {
+        width: 100%;
+    }
+    .quick-messages-grid {
+        grid-template-columns: 1fr;
+    }
+    .quick-message-button .icon {
+        font-size: 2.5em;
+    }
+}
