@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blink Morse Communicator - Quick Messages</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+</head>
+<body class="quick-messages-page"> 
+    <div class="app-container">
+        <header class="app-header">
+            <div class="profile-section">
+                <div class="profile-avatar"></div>
+                <span id="currentUsernameDisplay" class="profile-name">Eleanor</span> 
+            </div>
+            <div class="timer-section">
+                <div class="timer-unit">
+                    <span id="hoursDisplay" class="timer-value">00</span>
+                    <span class="timer-label">Hours</span>
+                </div>
+                <div class="timer-unit">
+                    <span id="minutesDisplay" class="timer-value">00</span>
+                    <span class="timer-label">Minutes</span>
+                </div>
+                <div class="timer-unit">
+                    <span id="secondsDisplay" class="timer-value">00</span>
+                    <span class="timer-label">Seconds</span>
+                </div>
+            </div>
+        </header>
+        <!-- Added video and canvas elements for webcam streaming -->
+        <video id="webcam" autoplay muted playsinline style="width: 320px; height: 240px; border: 1px solid #ccc;"></video>
+        <canvas id="canvas" style="display:none;"></canvas>
+
+        <main class="app-main-content">
+            <nav class="left-nav-panel">
+                <button class="nav-button yellow" data-text="Speak">
+                    <span class="icon">&#x1F5E3;</span>
+                </button>
+                <a href="/" class="nav-button blue" data-text="Message" id="mainMessageNavBtn">
+                    <span class="icon">&#x1F4AC;</span>
+                </a>
+                <button class="nav-button green" data-text="Call">
+                    <span class="icon">&#x1F4DE;</span>
+                </button>
+            </nav>
+
+            <section class="quick-messages-grid">
+                <button class="quick-message-button yellow" id="qmHungry">
+                    <span class="icon">&#x1F963;</span> <span class="text">I am hungry</span>
+                </button>
+                <button class="quick-message-button blue" id="qmWater">
+                    <span class="icon">&#x1F964;</span> <span class="text">I need water</span>
+                </button>
+                <button class="quick-message-button red" id="qmCold">
+                    <span class="icon">&#x1F321;&#xFE0F;</span> <span class="text">I am cold</span>
+                </button>
+
+                <button class="quick-message-button green" id="qmPain">
+                    <span class="icon">&#x1F4A7;</span> <span class="text">I am in pain</span>
+                </button>
+                <button class="quick-message-button teal" id="qmTired">
+                    <span class="icon">&#x1F634;</span> <span class="text">I am tired</span>
+                </button>
+                <button class="quick-message-button pink" id="qmBathroom">
+                    <span class="icon">&#x1F6BD;</span> <span class="text">I need bathroom</span>
+                </button>
+
+                <button class="quick-message-button light-green" id="qmCallNurse">
+                    <span class="icon">&#x260E;&#xFE0F;</span> <span class="text">Call nurse</span>
+                </button>
+                <button class="quick-message-button light-blue" id="qmTvOn1">
+                    <span class="icon">&#x1F4FA;</span> <span class="text">Turn TV on/off</span>
+                </button>
+                <button class="quick-message-button light-blue" id="backButton">
+                    <span class="icon">&#x2B05;</span> <span class="text">Back</span>
+                </button>
+
+                <!-- ✅ START BUTTON added here -->
+                <button id="startQuickMsgButton" class="control-button primary" style="grid-column: span 2;">Start</button>
+            </section>
+
+            <nav class="right-nav-panel">
+                <button class="nav-button blue active" data-text="Quick Message" id="quickMessageNavBtn">
+                    <span class="icon">&#x1F4DD;</span>
+                </button>
+                <button class="nav-button red" data-text="Health" id="navHealthBtnQm">
+                    <span class="icon">&#x2764;&#xFE0F;</span>
+                </button>
+                <button class="nav-button purple" data-text="Media" id="navMediaBtnQm">
+                    <span class="icon">&#x1F3A5;</span>
+                </button>
+            </nav>
+        </main>
+
+        <footer class="app-footer">
+            <div class="message-output-area">
+                <p id="messageDisplay" class="output-text main-message">Selected Message: </p>
+                <button class="action-button primary" id="sendQuickMessageBtn">Send Quick Message</button>
+            </div>
+            <div class="user-management-area">
+                <select id="userSelect" class="user-dropdown">
+                    <option value="">-- Select User --</option>
+                </select>
+                <input type="text" id="newUsernameInput" placeholder="New Username" class="user-input">
+                <button id="createUserBtn" class="action-button green-bg">Create User</button>
+                <button id="trainUserBtn" class="action-button blue-bg">Train User</button>
+            </div>
+        </footer>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
