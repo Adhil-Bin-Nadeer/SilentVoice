@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blink Morse Communicator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+</head>
+<body class="main-page"> 
+    <div class="app-container">
+        <header class="app-header">
+            <div class="profile-section">
+                <div class="profile-avatar"></div>
+                <span id="currentUsernameDisplay" class="profile-name">Edward</span>
+            </div>
+            <div class="timer-section">
+                <div class="timer-unit">
+                    <span id="hoursDisplay" class="timer-value">00</span>
+                    <span class="timer-label">Hours</span>
+                </div>
+                <div class="timer-unit">
+                    <span id="minutesDisplay" class="timer-value">00</span>
+                    <span class="timer-label">Minutes</span>
+                </div>
+                <div class="timer-unit">
+                    <span id="secondsDisplay" class="timer-value">00</span>
+                    <span class="timer-label">Seconds</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="app-main-content">
+            <nav class="left-nav-panel">
+                <button class="nav-button yellow" data-text="Speak" id="navSpeakBtn"> <span class="icon">&#x1F5E3;</span> </button>
+<a href="message.html" class="nav-button blue" data-text="Message" id="navMessageBtn"> <span class="icon">&#x1F4AC;</span> </a>
+                <button class="nav-button green" data-text="Call" id="navCallBtn"> <span class="icon">&#x1F4DE;</span> </button>
+                <a href="roomcontrol.html" class="nav-button purple" data-text="Room Control" id="navRoomControlBtn"> <span class="icon">&#x1F4A1;</span> </a>
+            </nav>
+
+            <section class="video-communication-section">
+                <div class="video-display-area">
+                    <video id="webcam" autoplay muted playsinline></video> <canvas id="canvas" style="display: none;"></canvas> 
+                </div>
+
+                <div class="communication-controls">
+                    <div class="main-control-group">
+                        <button id="startButton" class="control-button primary">Start</button>
+                        <button id="stopButton" class="control-button secondary" disabled>Stop</button>
+                        <button id="clearButton" class="control-button tertiary" disabled>Clear</button>
+                    </div>
+                    <div class="additional-control-group">
+                         <button class="control-button icon-button blue" data-text="Call" id="controlCallBtn"> <span class="icon">&#x1F4DE;</span> </button>
+                        <button class="control-button icon-button gray" data-text="Settings" id="controlSettingsBtn"> <span class="icon">&#x2699;</span> </button>
+                    </div>
+                </div>
+
+                <div class="blink-feedback-area">
+                    <div class="progress-bar-wrapper">
+                        <div id="cooldownProgressBar" class="progress-bar"></div>
+                    </div>
+                    <span id="overallStatusText" class="status-message">Status: Stopped</span>
+                    <span id="letterTimerInfo" class="timer-hint"></span>
+                    <span id="spaceTimerInfo" class="timer-hint"></span>
+                </div>
+            </section>
+
+            <nav class="right-nav-panel">
+                <a href="/quick_messages" class="nav-button blue" data-text="Quick Message" id="quickMessageNavBtn">
+                    <span class="icon">&#x1F4DD;</span> </a>
+                <button class="nav-button red" data-text="Health" id="navHealthBtn"> <span class="icon">&#x2764;&#xFE0F;</span> </button>
+                <a href="/flappy_bird" class="nav-button purple" data-text="Media" id="navMediaBtn"> <span class="icon">&#x1F3A5;</span> </a>
+            </nav>
+        </main>
+
+        <footer class="app-footer">
+            <div class="message-output-area">
+                <p id="messageDisplay" class="output-text main-message">Message: </p>
+                <p id="morseSequenceDisplay" class="output-text morse-sequence">Current: </p>
+            </div>
+            <div class="user-management-area">
+                <select id="userSelect" class="user-dropdown">
+                    <option value="">-- Select User --</option>
+                </select>
+                <input type="text" id="newUsernameInput" placeholder="New Username" class="user-input">
+                <button id="createUserBtn" class="action-button green-bg">Create User</button>
+                <button id="trainUserBtn" class="action-button blue-bg">Train User</button>
+            </div>
+        </footer>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
