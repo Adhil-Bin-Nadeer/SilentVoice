@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blink Morse Communicator - Message</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <style>
+        /* Additional styles for message page layout */
+        body.message-page {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .message-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 100vw;
+            max-width: 100vw;
+            height: 100vh;
+            max-height: 100vh;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 80px 1fr 80px;
+            grid-template-rows: 40px 240px 40px 1fr 60px;
+            grid-gap: 10px;
+            position: relative;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        .header {
+            grid-column: 1 / 4;
+            background-color: #1a2a4f;
+            color: white;
+            border-radius: 6px 6px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .header .username {
+            display: flex;
+            align-items: center;
+        }
+        .header .username img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .timer {
+            font-family: monospace;
+        }
+        .morse-grid-left, .morse-grid-right {
+            background: #e9ecef;
+            border-radius: 6px;
+            padding: 5px;
+            font-family: monospace;
+            font-size: 0.8em;
+            overflow-y: auto;
+            user-select: none;
+        }
+        .morse-grid-left {
+            grid-column: 1 / 2;
+            grid-row: 2 / 5;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 4px;
+        }
+        .morse-grid-right {
+            grid-column: 3 / 4;
+            grid-row: 2 / 5;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 4px;
+        }
+        .morse-cell {
+            width: 30px;
+            height: 30px;
+            background: #1a2a4f;
+            color: white;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            user-select: none;
+        }
+        .morse-cell .letter {
+            font-weight: bold;
+            font-size: 1em;
+        }
+        .morse-cell .code {
+            font-size: 0.7em;
+            color: #a0aec0;
+        }
+        .video-area {
+            grid-column: 2 / 3;
+            grid-row: 2 / 3;
+            background: black;
+            border-radius: 6px;
+            position: relative;
+            width: 240px;
+            height: 240px;
+            justify-self: center;
+        }
+        video#webcam {
+            width: 240px;
+            height: 240px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+        .message-display {
+            grid-column: 2 / 3;
+            grid-row: 3 / 4;
+            font-size: 1em;
+            font-weight: bold;
+            color: #333;
+            padding: 5px 0;
+        }
+        .morse-display {
+            grid-column: 2 / 3;
+            grid-row: 4 / 5;
+            font-family: monospace;
+            font-size: 0.9em;
+            color: #555;
+            white-space: nowrap;
+            overflow-x: auto;
+            border-bottom: 2px solid #3182ce;
+            padding-bottom: 4px;
+        }
+        .controls {
+            grid-column: 2 / 3;
+            grid-row: 5 / 6;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        button.control-button {
+            padding: 10px 30px;
+            font-size: 1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+            user-select: none;
+        }
+        button.control-button.start {
+            background-color: #38a169; /* green */
+        }
+        button.control-button.stop {
+            background-color: #e53e3e; /* red */
+        }
+    </style>
+</head>
+<body class="message-page">
+    <div class="message-container">
+        <div class="header">
+            <div class="username">
+                <img src="https://i.pravatar.cc/40?u=eleanor" alt="User Avatar" />
+                <span>Eleanor</span>
+            </div>
+            <div class="status-container" style="display:flex; align-items:center; gap:10px;">
+                <div id="statusText" style="color:limegreen; font-weight:bold; font-size:1em;">Ready for blinks</div>
+                <div id="statusIndicator" style="width:24px; height:24px; border-radius:50%; background-color:limegreen; color:black; font-weight:bold; display:flex; align-items:center; justify-content:center; font-size:0.9em;">OK</div>
+            </div>
+            <div class="timer" id="timerDisplay">00:00:00</div>
+        </div>
+        <div class="morse-grid-left" id="morseGridLeft">
+            <!-- Left Morse code cells -->
+            <div class="morse-cell"><div class="letter">A</div><div class="code">.-</div></div>
+            <div class="morse-cell"><div class="letter">B</div><div class="code">-...</div></div>
+            <div class="morse-cell"><div class="letter">C</div><div class="code">-.-.</div></div>
+            <div class="morse-cell"><div class="letter">E</div><div class="code">.</div></div>
+            <div class="morse-cell"><div class="letter">F</div><div class="code">..-.</div></div>
+            <div class="morse-cell"><div class="letter">G</div><div class="code">--.</div></div>
+            <div class="morse-cell"><div class="letter">I</div><div class="code">..</div></div>
+            <div class="morse-cell"><div class="letter">J</div><div class="code">.---</div></div>
+            <div class="morse-cell"><div class="letter">L</div><div class="code">.-..</div></div>
+            <div class="morse-cell"><div class="letter">M</div><div class="code">--</div></div>
+            <div class="morse-cell"><div class="letter">P</div><div class="code">.--.</div></div>
+            <div class="morse-cell"><div class="letter">R</div><div class="code">.-.</div></div>
+            <div class="morse-cell"><div class="letter">S</div><div class="code">...</div></div>
+            <div class="morse-cell"><div class="letter">T</div><div class="code">-</div></div>
+            <div class="morse-cell"><div class="letter">U</div><div class="code">..-</div></div>
+            <div class="morse-cell"><div class="letter">V</div><div class="code">...-</div></div>
+        </div>
+        <div class="video-area">
+            <video id="webcam" autoplay muted playsinline></video>
+        </div>
+        <div class="morse-grid-right" id="morseGridRight">
+            <!-- Right Morse code cells -->
+            <div class="morse-cell"><div class="letter">N</div><div class="code">-.</div></div>
+            <div class="morse-cell"><div class="letter">O</div><div class="code">---</div></div>
+            <div class="morse-cell"><div class="letter">Q</div><div class="code">--.-</div></div>
+            <div class="morse-cell"><div class="letter">W</div><div class="code">.--</div></div>
+            <div class="morse-cell"><div class="letter">X</div><div class="code">-..-</div></div>
+            <div class="morse-cell"><div class="letter">Y</div><div class="code">-.--</div></div>
+            <div class="morse-cell"><div class="letter">Z</div><div class="code">--..</div></div>
+            <div class="morse-cell"><div class="letter">1</div><div class="code">.----</div></div>
+            <div class="morse-cell"><div class="letter">2</div><div class="code">..---</div></div>
+            <div class="morse-cell"><div class="letter">3</div><div class="code">...--</div></div>
+            <div class="morse-cell"><div class="letter">4</div><div class="code">....-</div></div>
+            <div class="morse-cell"><div class="letter">5</div><div class="code">.....</div></div>
+            <div class="morse-cell"><div class="letter">6</div><div class="code">-....</div></div>
+            <div class="morse-cell"><div class="letter">7</div><div class="code">--...</div></div>
+            <div class="morse-cell"><div class="letter">8</div><div class="code">---..</div></div>
+            <div class="morse-cell"><div class="letter">9</div><div class="code">----.</div></div>
+            <div class="morse-cell"><div class="letter">0</div><div class="code">-----</div></div>
+            <div class="morse-cell"><div class="letter">?</div><div class="code">..--..</div></div>
+            <div class="morse-cell"><div class="letter">!</div><div class="code">-.-.--</div></div>
+            <div class="morse-cell"><div class="letter">@</div><div class="code">.--.-.</div></div>
+            <div class="morse-cell"><div class="letter">.</div><div class="code">.-.-.-</div></div>
+            <div class="morse-cell"><div class="letter">,</div><div class="code">--..--</div></div>
+            <div class="morse-cell"><div class="letter">-</div><div class="code">-....-</div></div>
+            <div class="morse-cell"><div class="letter">/</div><div class="code">-..-.</div></div>
+            <div class="morse-cell"><div class="letter">=</div><div class="code">-...-</div></div>
+            <div class="morse-cell"><div class="letter">:</div><div class="code">---...</div></div>
+            <div class="morse-cell"><div class="letter">_</div><div class="code">..--.-</div></div>
+            <div class="morse-cell"><div class="letter">"</div><div class="code">.-..-.</div></div>
+            <div class="morse-cell"><div class="letter">'</div><div class="code">.----.</div></div>
+            <div class="morse-cell"><div class="letter">;</div><div class="code">-.-.-.</div></div>
+            <div class="morse-cell"><div class="letter">+</div><div class="code">.-.-.</div></div>
+            <div class="morse-cell"><div class="letter">$</div><div class="code">...-..-</div></div>
+        </div>
+        <div class="message-display" id="messageDisplay">Message: </div>
+        <div class="morse-display" id="morseDisplay">Morse: </div>
+        <div class="controls">
+            <button id="startButton" class="control-button start">START</button>
+            <button id="stopButton" class="control-button stop">STOP</button>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+
+        const messageDisplay = document.getElementById('messageDisplay');
+        const morseDisplay = document.getElementById('morseDisplay');
+        const startButton = document.getElementById('startButton');
+        const stopButton = document.getElementById('stopButton');
+        const webcam = document.getElementById('webcam');
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        let communicationStarted = false;
+        let stream = null;
+
+        function initWebcam() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(s => {
+                        stream = s;
+                        webcam.srcObject = stream;
+                        webcam.addEventListener('loadedmetadata', () => {
+                            canvas.width = webcam.videoWidth;
+                            canvas.height = webcam.videoHeight;
+                            webcam.play();
+                            console.log('Webcam initialized successfully.');
+                            startSendingFrames();
+                        });
+                    })
+                    .catch(err => {
+                        console.error('Error accessing webcam: ', err);
+                        alert('Could not access webcam. Please ensure it is connected and permissions are granted.');
+                        stopCommunication();
+                    });
+            } else {
+                alert('Your browser does not support webcam access.');
+                stopCommunication();
+            }
+        }
+
+        function startSendingFrames() {
+            if (!stream || !stream.active) {
+                console.error('Cannot start sending frames: Webcam stream not active.');
+                return;
+            }
+            if (this._frameSendingInterval) {
+                clearInterval(this._frameSendingInterval);
+                this._frameSendingInterval = null;
+            }
+            const sendFrame = () => {
+                if (!stream || !stream.active) {
+                    clearInterval(this._frameSendingInterval);
+                    this._frameSendingInterval = null;
+                    return;
+                }
+                ctx.drawImage(webcam, 0, 0, canvas.width, canvas.height);
+                const frameData = canvas.toDataURL('image/jpeg', 0.5);
+                socket.emit('frame', { image: frameData });
+            };
+            this._frameSendingInterval = setInterval(sendFrame, 100);
+            console.log('Started sending frames to backend.');
+        }
+
+        function startCommunication() {
+            if (communicationStarted) return;
+            communicationStarted = true;
+            socket.emit('start_stream');
+            socket.emit('set_mode', { mode: 'morse_input' });
+            startButton.disabled = true;
+            stopButton.disabled = false;
+        }
+
+        // Automatically start webcam and communication on page load
+        window.addEventListener('load', () => {
+            initWebcam();
+            startCommunication();
+        });
+
+        function stopCommunication() {
+            if (!communicationStarted) return;
+            communicationStarted = false;
+            socket.emit('stop_stream');
+            socket.emit('set_mode', { mode: 'idle' });
+            startButton.disabled = false;
+            stopButton.disabled = true;
+            messageDisplay.textContent = 'Message: ';
+            morseDisplay.textContent = 'Morse: ';
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+            if (webcam) webcam.srcObject = null;
+            if (this._frameSendingInterval) {
+                clearInterval(this._frameSendingInterval);
+                this._frameSendingInterval = null;
+            }
+        }
+
+        socket.on('connect', () => {
+            console.log('Connected to server');
+            // startCommunication(); // Already started on load after initWebcam
+        });
+
+        socket.on('blink_detected', (data) => {
+            console.log('Blink detected:', data.type);
+        });
+
+        socket.on('update_ui', (data) => {
+            if (data.message !== undefined) {
+                messageDisplay.textContent = 'Message: ' + data.message;
+            }
+            if (data.morse_sequence !== undefined) {
+                morseDisplay.textContent = 'Morse: ' + data.morse_sequence;
+            }
+            if (data.status !== undefined) {
+                const statusText = document.getElementById('statusText');
+                const statusIndicator = document.getElementById('statusIndicator');
+                if (statusText) {
+                    statusText.textContent = data.status;
+                }
+                if (statusIndicator) {
+                    if (data.status.toLowerCase().includes('ready')) {
+                        statusIndicator.style.backgroundColor = 'limegreen';
+                        statusIndicator.textContent = 'OK';
+                    } else {
+                        statusIndicator.style.backgroundColor = 'gray';
+                        statusIndicator.textContent = '';
+                    }
+                }
+            }
+            if (data.timer !== undefined) {
+                const timerDisplay = document.getElementById('timerDisplay');
+                if (timerDisplay) {
+                    timerDisplay.textContent = 'Timer: ' + data.timer;
+                }
+            }
+        });
+
+        startButton.addEventListener('click', startCommunication);
+        stopButton.addEventListener('click', stopCommunication);
+    </script>
+</body>
+</html>
