@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Control</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+</head>
+<body class="device-control-page">
+    <div class="app-container">
+        <header class="app-header">
+            <div class="profile-section">
+                <div class="profile-avatar"></div>
+                <span id="currentUsernameDisplay" class="profile-name">Edward</span>
+            </div>
+            <div class="timer-section">
+                <div class="timer-unit">
+                    <span id="hoursDisplay" class="timer-value">00</span>
+                    <span class="timer-label">Hours</span>
+                </div>
+                <div class="timer-unit">
+                    <span id="minutesDisplay" class="timer-value">00</span>
+                    <span class="timer-label">Minutes</span>
+                </div>
+                <div class="timer-unit">
+                    <span id="secondsDisplay" class="timer-value">00</span>
+                    <span class="timer-label">Seconds</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="app-main-content">
+            <section class="device-control-section">
+                <h2 id="deviceTitle">Device Control</h2>
+                <div class="control-buttons">
+                    <button class="control-button on-button" id="onBtn" data-action="on">ON</button>
+                    <button class="control-button off-button" id="offBtn" data-action="off">OFF</button>
+                    <button class="control-button back-button" id="backBtn">Back</button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="app-footer">
+            <div class="message-output-area">
+                <p id="messageDisplay" class="output-text main-message">Message: </p>
+                <p id="morseSequenceDisplay" class="output-text morse-sequence">Current: </p>
+            </div>
+            <div class="user-management-area">
+                <select id="userSelect" class="user-dropdown">
+                    <option value="">-- Select User --</option>
+                </select>
+                <input type="text" id="newUsernameInput" placeholder="New Username" class="user-input">
+                <button id="createUserBtn" class="action-button green-bg">Create User</button>
+                <button id="trainUserBtn" class="action-button blue-bg">Train User</button>
+            </div>
+        </footer>
+    </div>
+
+    <div id="messageDisplay" style="display:none;"></div>
+    <div id="morseSequenceDisplay" style="display:none;"></div>
+    <div id="overallStatusText" style="display:none;"></div>
+    <div id="cooldownProgressBar" style="display:none;"></div>
+    <div id="letterTimerInfo" style="display:none;"></div>
+    <div id="spaceTimerInfo" style="display:none;"></div>
+    <video id="webcam" autoplay style="display:none;"></video>
+    <canvas id="canvas" style="display:none;"></canvas>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
