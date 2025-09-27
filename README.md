@@ -2,8 +2,10 @@
 
 **AI-powered Assistive Communication**
 
-
 ### SilentVoice enables speech-impaired users to communicate using intentional eye blinks detected by AI, instantly converting blinks into spoken words and text on any webcam-equipped device. Accessible, privacy-focused, and designed for healthcare and caregiver impact.
+
+
+![Initial Interface](https://drive.google.com/uc?export=view&id=1h_OeTtWzXWzQ6q_ys7fOpo83JGyN_WFZ)
 ---
 
 ## Table of Contents
@@ -56,7 +58,7 @@ SilentVoice converts blinks into clear voice outputs using AI, allowing non-verb
 [![Smart Room Automation Demo](https://drive.google.com/uc?export=view&id=1LWK__yaKs-PoPaxsTS37MDKTqVw5f7Q0)](https://drive.google.com/file/d/1d30jowZyJBXHM7QrGRP3C52ePyGhPNLw/view?usp=sharing)
 
 ### 4. Blink Based Flappy Chicken Game
-[![Flappy Chicken Demo](https://drive.google.com/uc?export=view&id=1fCvb3P92Qtbj_bSOVT17o-WUyIXuJdcO)](https://drive.google.com/file/d/1fCvb3P92Qtbj_bSOVT17o-WUyIXuJdcO/view?usp=sharing)
+[![Flappy Chicken Demo](https://drive.google.com/uc?export=view&id=1x3Oq-hZFHFGvx2BrZPzHGa3unvMbKa_u)](https://drive.google.com/file/d/1fCvb3P92Qtbj_bSOVT17o-WUyIXuJdcO/view?usp=sharing)
 
 ---
 
