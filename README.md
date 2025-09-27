@@ -11,6 +11,7 @@
 - [Problem Statement](#problem-statement)
 - [Solution](#solution)
 - [How It Works](#how-it-works)
+- [Demo](#demo)
 - [Key Features](#key-features)
 - [Target Audience](#target-audience)
 - [Future Scope](#future-scope)
@@ -40,6 +41,19 @@ SilentVoice converts blinks into clear voice outputs using AI, allowing non-verb
 3. **Communication:** The user blinks to select phrases or letters, which the system converts into voice output in real-time.
 4. **Smart Room Control:** Specific blink patterns can also trigger smart room actions like turning lights or fans on/off.
 5. **Feedback & Learning:** The AI tracks user interactions to suggest predictive phrases and improve response speed over time.
+
+---
+
+## Demo
+
+### 1. Quick Messages
+[![Quick Messages Demo](https://drive.google.com/file/d/1tsW2gJ3ENUJB9-H_1vB1Xxd9b8QDcgpt/view?usp=sharing)](https://drive.google.com/file/d/11QcKRtFhicbu1fCl6sNnKueqXf2n3ePn/view?usp=sharing)
+
+### 2. Morse Code Communication
+[![Morse Code Demo](https://drive.google.com/file/d/1HuJQ6WYXjicWxFJ_dr2x36mVoBQh3pYg/view?usp=sharing)](https://drive.google.com/file/d/1dOzml4YpCVwKC1Og4cLlsZVrxDV8-4U_/view?usp=sharing)
+
+### 3. Smart Room Automation
+[![Smart Room Automation Demo](https://drive.google.com/file/d/1LWK__yaKs-PoPaxsTS37MDKTqVw5f7Q0/view?usp=sharing)](https://drive.google.com/file/d/1d30jowZyJBXHM7QrGRP3C52ePyGhPNLw/view?usp=sharing)
 
 ---
 
