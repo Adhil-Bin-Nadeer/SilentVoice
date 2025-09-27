@@ -84,3 +84,9 @@ SilentVoice converts blinks into clear voice outputs using AI, allowing non-verb
 - **Community & Care Network** – Connect patients, caretakers, and therapists for support and training.
 
 ---
+
+## Contributors
+- Adhil Bin Nadeer
+- Manuel B George
+- Christina George
+- Febin Jo Anto
