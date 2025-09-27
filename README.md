@@ -27,7 +27,6 @@ SilentVoice converts blinks into clear voice outputs using AI, allowing non-verb
 - 🔊 **Blink-to-Speech Conversion** – Users communicate using eye movements.
 - 🧠 **Adapted Communication Profiles** – Personalized for each user’s abilities and needs.
 - 🏠 **Smart Room Automation** – Control lights, fans, and other room devices using blink-based commands.
-- 🔒 **Privacy First** – Secure data handling with no sensitive data leaks.
 
 ---
 
