@@ -55,6 +55,9 @@ SilentVoice converts blinks into clear voice outputs using AI, allowing non-verb
 ### 3. Smart Room Automation
 [![Smart Room Automation Demo](https://drive.google.com/uc?export=view&id=1LWK__yaKs-PoPaxsTS37MDKTqVw5f7Q0)](https://drive.google.com/file/d/1d30jowZyJBXHM7QrGRP3C52ePyGhPNLw/view?usp=sharing)
 
+### 4. Blink Based Flappy Chicken Game
+[![Flappy Chicken Demo](https://drive.google.com/uc?export=view&id=1fCvb3P92Qtbj_bSOVT17o-WUyIXuJdcO)](https://drive.google.com/file/d/1fCvb3P92Qtbj_bSOVT17o-WUyIXuJdcO/view?usp=sharing)
+
 ---
 
 ## Key Features
