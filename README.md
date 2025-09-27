@@ -86,7 +86,7 @@ SilentVoice converts blinks into clear voice outputs using AI, allowing non-verb
 ---
 
 ## Contributors
-- Adhil Bin Nadeer
-- Manuel B George
-- Christina George
-- Febin Jo Anto
+- [Adhil Bin Nadeer](https://github.com/Adhil-Bin-Nadeer)
+- [Manuel B George](https://github.com/manuel13-mg)
+- [Christina George](https://github.com/christinawdc)
+- [Febin Jo Anto](https://github.com/FJA-bit)
