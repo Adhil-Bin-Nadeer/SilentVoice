@@ -13,7 +13,6 @@
 - [How It Works](#how-it-works)
 - [Key Features](#key-features)
 - [Target Audience](#target-audience)
-- [Product Advantages](#product-advantages)
 - [Future Scope](#future-scope)
 
 ---
