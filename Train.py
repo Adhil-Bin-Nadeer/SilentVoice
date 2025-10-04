@@ -15,9 +15,9 @@ from collections import deque
 import warnings
 
 # --- Suppress TensorFlow and related logs for a cleaner console ---
-os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-os.environ['CUDA_VISIBLE_DEVICES'] = '-1' # Disable CUDA for dlib/Mediapipe if not explicitly using GPU for TF
+os.environ[ 'TF_ENABLE_ONEDNN_OPTS'] = '0'
+os.environ[ 'TF_CPP_MIN_LOG_LEVEL'] = '3'
+os.environ[ 'CUDA_VISIBLE_DEVICES'] = '-1' # Disable CUDA for dlib/Mediapipe if not explicitly using GPU for TF
 
 warnings.filterwarnings('ignore', category=UserWarning)
 warnings.filterwarnings('ignore', category=FutureWarning)
@@ -626,4 +626,5 @@ def main_train():
 
 if __name__ == "__main__":
     main_train()
+
 
