@@ -105,6 +105,8 @@ class BlinkDetector:
             return enhanced
         return frame
 
+
+    
     def eye_aspect_ratio_dlib(self, eye_landmarks):
         try:
             A = distance.euclidean(eye_landmarks[1], eye_landmarks[5])
@@ -984,3 +986,4 @@ if __name__ == '__main__':
     print("Starting Flask-SocketIO server...")
 
     socketio.run(app, debug=False, allow_unsafe_werkzeug=True, host='127.0.0.1', port=5000)
+
