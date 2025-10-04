@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blink Morse Communicator - Message</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <style>
+        /* Aesthetic and symmetrical layout for message page */
+        body.message-page {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .message-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            width: 90vw;
+            max-width: 1200px;
+            height: 90vh;
+            max-height: 800px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 50px 200px 150px 180px 60px;
+            grid-gap: 15px;
+            position: relative;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        .header {
+            grid-column: 1 / 4;
+            background: linear-gradient(135deg, #1a2a4f 0%, #2d3b55 100%);
+            color: white;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            font-weight: 600;
+            font-size: 1.1em;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .header .username {
+            display: flex;
+            align-items: center;
+        }
+        .header .username img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin-right: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        .timer {
+            font-family: 'Courier New', monospace;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.95em;
+        }
+        .status-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #statusText {
+            color: #48bb78;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+        #statusIndicator {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            box-shadow: 0 2px 4px rgba(72, 187, 120, 0.3);
+        }
+        .morse-upper-left, .morse-upper-right {
+            background: linear-gradient(135deg, #e9ecef 0%, #f8f9fa 100%);
+            border-radius: 12px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            user-select: none;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 10px;
+            align-items: center;
+            justify-items: center;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .morse-upper-left {
+            grid-column: 1 / 2;
+            grid-row: 2 / 3;
+        }
+        .morse-upper-right {
+            grid-column: 3 / 4;
+            grid-row: 2 / 3;
+        }
+        .morse-lower {
+            grid-column: 1 / 4;
+            grid-row: 4 / 5;
+            background: linear-gradient(135deg, #e9ecef 0%, #f8f9fa 100%);
+            border-radius: 12px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            user-select: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            grid-auto-rows: 60px;
+            gap: 10px;
+            overflow-y: auto;
+            max-height: 100%;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            scrollbar-width: thin;
+            scrollbar-color: #1a2a4f #f1f3f4;
+        }
+        .morse-lower::-webkit-scrollbar {
+            width: 6px;
+        }
+        .morse-lower::-webkit-scrollbar-track {
+            background: #f1f3f4;
+            border-radius: 3px;
+        }
+        .morse-lower::-webkit-scrollbar-thumb {
+            background: #1a2a4f;
+            border-radius: 3px;
+        }
+        .morse-cell {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a2a4f 0%, #2d3b55 100%);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            user-select: none;
+            box-shadow: 0 2px 8px rgba(26, 42, 79, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .morse-cell:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26, 42, 79, 0.4);
+        }
+        .morse-cell .letter {
+            font-weight: bold;
+            font-size: 1.3em;
+            margin-bottom: 2px;
+        }
+        .morse-cell .code {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #e2e8f0;
+            line-height: 0.9;
+            font-family: 'Courier New', monospace;
+        }
+        .video-area {
+            grid-column: 2 / 3;
+            grid-row: 2 / 3;
+            background: #000;
+            border-radius: 12px;
+            position: relative;
+            width: 160px;
+            height: 120px;
+            justify-self: center;
+            align-self: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        video#webcam {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+        .center-displays {
+            grid-column: 2 / 3;
+            grid-row: 3 / 4;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            padding: 15px;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+        .message-display {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #2d3748;
+            padding: 10px 0;
+            flex-shrink: 0;
+            white-space: normal;
+            overflow: visible;
+            min-height: 30px;
+            border-bottom: 2px solid #3182ce;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.9));
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .morse-display {
+            font-family: 'Courier New', monospace;
+            font-size: 1.0em;
+            color: #4a5568;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow: visible;
+            padding: 10px;
+            flex: 1;
+            min-height: 50px;
+            line-height: 1.4;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.9));
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+            border: 1px solid rgba(49, 130, 206, 0.2);
+        }
+        .controls {
+            grid-column: 1 / 4;
+            grid-row: 5 / 6;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 10px 0;
+        }
+        button.control-button {
+            padding: 12px 32px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            user-select: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            min-width: 120px;
+        }
+        button.control-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+        button.control-button.start {
+            background: linear-gradient(135deg, #38a169, #2f855a);
+        }
+        button.control-button.stop {
+            background: linear-gradient(135deg, #e53e3e, #c53030);
+        }
+        button.control-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+    </style>
+</head>
+<body class="message-page">
+    <div class="message-container">
+        <div class="header">
+            <div class="username">
+                <img src="https://i.pravatar.cc/40?u=eleanor" alt="User  Avatar" />
+                <span>Eleanor</span>
+            </div>
+            <div class="status-container">
+                <div id="statusText">Ready for blinks</div>
+                <div id="statusIndicator">OK</div>
+            </div>
+            <div class="timer" id="timerDisplay">00:00:00</div>
+        </div>
+        <div class="morse-upper-left" id="morseUpperLeft">
+            <!-- Symmetrical 3x3: A-I (in order) -->
+            <div class="morse-cell"><div class="letter">A</div><div class="code">.-</div></div>
+            <div class="morse-cell"><div class="letter">B</div><div class="code">-...</div></div>
+            <div class="morse-cell"><div class="letter">C</div><div class="code">-.-.</div></div>
+            <div class="morse-cell"><div class="letter">D</div><div class="code">-..</div></div>
+            <div class="morse-cell"><div class="letter">E</div><div class="code">.</div></div>
+            <div class="morse-cell"><div class="letter">F</div><div class="code">..-.</div></div>
+            <div class="morse-cell"><div class="letter">G</div><div class="code">--.</div></div>
+            <div class="morse-cell"><div class="letter">H</div><div class="code">....</div></div>
+            <div class="morse-cell"><div class="letter">I</div><div class="code">..</div></div>
+        </div>
+        <div class="video-area">
+            <video id="webcam" autoplay muted playsinline></video>
+        </div>
+        <div class="morse-upper-right" id="morseUpperRight">
+            <!-- Symmetrical 3x3: J-R (in order) -->
+            <div class="morse-cell"><div class="letter">J</div><div class="code">.---</div></div>
+            <div class="morse-cell"><div class="letter">K</div><div class="code">-.-</div></div>
+            <div class="morse-cell"><div class="letter">L</div><div class="code">.-..</div></div>
+            <div class="morse-cell"><div class="letter">M</div><div class="code">--</div></div>
+            <div class="morse-cell"><div class="letter">N</div><div class="code">-.</div></div>
+            <div class="morse-cell"><div class="letter">O</div><div class="code">---</div></div>
+            <div class="morse-cell"><div class="letter">P</div><div class="code">.--.</div></div>
+            <div class="morse-cell"><div class="letter">Q</div><div class="code">--.-</div></div>
+            <div class="morse-cell"><div class="letter">R</div><div class="code">.-.</div></div>
+        </div>
+        <div class="center-displays">
+            <div class="message-display" id="messageDisplay">Message: </div>
+            <div class="morse-display" id="morseDisplay">Morse: </div>
+        </div>
+        <div class="morse-lower" id="morseLower">
+            <!-- Lower grid: S-Z, numbers 0-9, punctuation (in order, auto-fitting for symmetry) -->
+            <div class="morse-cell"><div class="letter">S</div><div class="code">...</div></div>
+            <div class="morse-cell"><div class="letter">T</div><div class="code">-</div></div>
+            <div class="morse-cell"><div class="letter">U</div><div class="code">..-</div></div>
+            <div class="morse-cell"><div class="letter">V</div><div class="code">...-</div></div>
+            <div class="morse-cell"><div class="letter">W</div><div class="code">.--</div></div>
+            <div class="morse-cell"><div class="letter">X</div><div class="code">-..-</div></div>
+            <div class="morse-cell"><div class="letter">Y</div><div class="code">-.--</div></div>
+            <div class="morse-cell"><div class="letter">Z</div><div class="code">--..</div></div>
+            <div class="morse-cell"><div class="letter">0</div><div class="code">-----</div></div>
+            <div class="morse-cell"><div class="letter">1</div><div class="code">.----</div></div>
+            <div class="morse-cell"><div class="letter">2</div><div class="code">..---</div></div>
+            <div class="morse-cell"><div class="letter">3</div><div class="code">...--</div></div>
+            <div class="morse-cell"><div class="letter">4</div><div class="code">....-</div></div>
+            <div class="morse-cell"><div class="letter">5</div><div class="code">.....</div></div>
+            <div class="morse-cell"><div class="letter">6</div><div class="code">-....</div></div>
+            <div class="morse-cell"><div class="letter">7</div><div class="code">--...</div></div>
+            <div class="morse-cell"><div class="letter">8</div><div class="code">---..</div></div>
+            <div class="morse-cell"><div class="letter">9</div><div class="code">----.</div></div>
+            <div class="morse-cell"><div class="letter">?</div><div class="code">..--..</div></div>
+            <div class="morse-cell"><div class="letter">!</div><div class="code">-.-.--</div></div>
+            <div class="morse-cell"><div class="letter">.</div><div class="code">.-.-.-</div></div>
+            <div class="morse-cell"><div class="letter">,</div><div class="code">--..--</div></div>
+            <div class="morse-cell"><div class="letter">/</div><div class="code">-..-.</div></div>
+            <div class="morse-cell"><div class="letter">-</div><div class="code">-....-</div></div>
+            <div class="morse-cell"><div class
