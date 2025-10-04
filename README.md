@@ -1,3 +1,5 @@
+
+
 # SilentVoice
 
 **AI-powered Assistive Communication**
