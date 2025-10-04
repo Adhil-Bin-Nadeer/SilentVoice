@@ -68,6 +68,8 @@ function initWebcam() {
     }
 }
 
+
+
 /**
  * Sends video frames to the server for blink detection.
  */
@@ -1153,5 +1155,6 @@ function _startCommunicationFlow() {
         }
     });
 }
+
 
 
