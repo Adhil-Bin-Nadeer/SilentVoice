@@ -5,3 +5,4 @@ Think of it as a visual sandbox:
 
 1. Rough sketches, mockups, and early design ideas
 2.  Screenshots showing how things might work
+
