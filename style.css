@@ -1,3 +1,4 @@
+
 /* --- Global Styles & Resets --- */
 :root {
     --primary-blue: #007bff;
@@ -741,4 +742,5 @@ body {
     .quick-message-button .icon {
         font-size: 2.5em;
     }
+
 }
