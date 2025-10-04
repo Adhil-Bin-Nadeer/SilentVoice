@@ -3,6 +3,8 @@ import numpy as np
 import random
 import time
 
+
+
 # Load OpenCV's built-in Haar cascade for eyes
 eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_eye.xml")
 
@@ -236,4 +238,5 @@ while cap.isOpened():
 
 cap.release()
 cv2.destroyAllWindows()
+
 
